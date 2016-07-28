@@ -33,7 +33,7 @@ class MoviesViewControllerSpec: QuickSpec {
 
       it("has the same number of cells as movies") {
         let numberOfCells = moviesViewController.tableView!.numberOfRowsInSection(0)
-        let numberOfMovies = moviesViewController.movies.count
+        let numberOfMovies = moviesViewController.movieService.movies.count
         expect(numberOfCells).to(equal(numberOfMovies))
       }
     }
