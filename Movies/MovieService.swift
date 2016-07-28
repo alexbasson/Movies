@@ -6,10 +6,16 @@ struct Movie {
   }
 }
 
-class MovieService {
-  let movies = [
-    Movie(title: "Movie 1"),
-    Movie(title: "Movie 2"),
-    Movie(title: "Movie 3")
-  ]
+protocol MovieService {
+  func movies() -> [Movie]
+}
+
+class RealMovieService: MovieService {
+  func movies() -> [Movie] {
+    return [
+      Movie(title: "Movie 1"),
+      Movie(title: "Movie 2"),
+      Movie(title: "Movie 3")
+    ]
+  }
 }

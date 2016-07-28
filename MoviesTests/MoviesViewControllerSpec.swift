@@ -2,6 +2,15 @@ import Quick
 import Nimble
 @testable import Movies
 
+class FakeMovieService: MovieService {
+  func movies() -> [Movie] {
+    return [
+      Movie(title: "Movie 1"),
+      Movie(title: "Movie 2")
+    ]
+  }
+}
+
 class MoviesViewControllerSpec: QuickSpec {
   override func spec() {
     describe("MoviesViewController") {
@@ -11,6 +20,7 @@ class MoviesViewControllerSpec: QuickSpec {
         // get the storyboard and use it to create an instance of MoviesViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         moviesViewController = storyboard.instantiateViewControllerWithIdentifier("MoviesViewController") as! MoviesViewController
+        moviesViewController.movieService = FakeMovieService()
 
         // render moviesViewController's view, so that we can test it
         let window = UIApplication.sharedApplication().keyWindow!
@@ -33,7 +43,7 @@ class MoviesViewControllerSpec: QuickSpec {
 
       it("has the same number of cells as movies") {
         let numberOfCells = moviesViewController.tableView!.numberOfRowsInSection(0)
-        let numberOfMovies = moviesViewController.movieService.movies.count
+        let numberOfMovies = moviesViewController.movieService.movies().count
         expect(numberOfCells).to(equal(numberOfMovies))
       }
     }
