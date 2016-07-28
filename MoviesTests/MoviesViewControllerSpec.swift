@@ -26,6 +26,9 @@ class MoviesViewControllerSpec: QuickSpec {
         let cells: [MovieCell] = moviesViewController.tableView!.visibleCells as! [MovieCell]
         let firstCell = cells[0]
         expect(firstCell.titleLabel!.text!).to(equal("Movie 1"))
+
+        let secondCell = cells[1]
+        expect(secondCell.titleLabel!.text!).to(equal("Movie 2"))
       }
     }
   }
