@@ -21,6 +21,12 @@ class MoviesViewControllerSpec: QuickSpec {
       it("has a table view") {
         expect(moviesViewController.tableView).notTo(beNil())
       }
+
+      it("has some movie titles in the table view") {
+        let cells: [MovieCell] = moviesViewController.tableView!.visibleCells as! [MovieCell]
+        let firstCell = cells[0]
+        expect(firstCell.titleLabel!.text!).to(equal("Movie 1"))
+      }
     }
   }
 }
