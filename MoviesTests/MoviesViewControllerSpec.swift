@@ -30,6 +30,12 @@ class MoviesViewControllerSpec: QuickSpec {
         let secondCell = cells[1]
         expect(secondCell.titleLabel!.text!).to(equal("Movie 2"))
       }
+
+      it("has the same number of cells as movies") {
+        let numberOfCells = moviesViewController.tableView!.numberOfRowsInSection(0)
+        let numberOfMovies = moviesViewController.movies.count
+        expect(numberOfCells).to(equal(numberOfMovies))
+      }
     }
   }
 }
