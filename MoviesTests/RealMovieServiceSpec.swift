@@ -2,12 +2,21 @@ import Quick
 import Nimble
 @testable import Movies
 
+class FakeURLSessionDataTask: URLSessionDataTask {
+  var resumeWasCalled: Bool = false
+
+  func resume() {
+    resumeWasCalled = true
+  }
+}
+
 class FakeURLSession: URLSession {
   var requestedURL: NSURL!
+  var dataTask = FakeURLSessionDataTask()
 
-  func dataTaskWithURL(url: NSURL, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> NSURLSessionDataTask {
+  func dataTaskWithURL(url: NSURL, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTask {
     requestedURL = url
-    return NSURLSessionDataTask()
+    return dataTask
   }
 }
 
@@ -28,16 +37,22 @@ class RealMovieServiceSpec: QuickSpec {
 
       describe("fetching movies") {
         describe("making the network request") {
-          it("makes a request to fetch movies") {
+          beforeEach() {
             // call 'fetchMovies' on the movie service,
             // so that we can test its behavior
             movieService.fetchMovies() {
               movies in
             }
+          }
 
+          it("makes a request to fetch movies") {
             // expect that movie service passed the correct url to the url session
             let moviesURL = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=f5u89dy6zq9ccyh5a728dzcu")!
             expect(urlSession.requestedURL).to(equal(moviesURL))
+          }
+
+          it("tells the data task to start") {
+            expect(urlSession.dataTask.resumeWasCalled).to(beTrue())
           }
         }
 
