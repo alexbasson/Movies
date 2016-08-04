@@ -8,7 +8,13 @@ class MoviesViewController: UIViewController {
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
-    movies = movieService.movies()
+    movieService.fetchMovies() {
+      movies in
+      self.movies = movies
+      if let tableView = self.tableView {
+        tableView.reloadData()
+      }
+    }
   }
 }
 

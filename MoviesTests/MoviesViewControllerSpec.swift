@@ -3,11 +3,11 @@ import Nimble
 @testable import Movies
 
 class FakeMovieService: MovieService {
-  func movies() -> [Movie] {
-    return [
+  func fetchMovies(closure: ([Movie] -> Void)) {
+    closure([
       Movie(title: "Movie 1"),
       Movie(title: "Movie 2")
-    ]
+    ])
   }
 }
 
@@ -43,7 +43,7 @@ class MoviesViewControllerSpec: QuickSpec {
 
       it("has the same number of cells as movies") {
         let numberOfCells = moviesViewController.tableView!.numberOfRowsInSection(0)
-        let numberOfMovies = moviesViewController.movieService.movies().count
+        let numberOfMovies = 2
         expect(numberOfCells).to(equal(numberOfMovies))
       }
     }

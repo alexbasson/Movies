@@ -7,15 +7,15 @@ struct Movie {
 }
 
 protocol MovieService {
-  func movies() -> [Movie]
+  func fetchMovies(closure: ([Movie] -> Void)) -> Void
 }
 
 class RealMovieService: MovieService {
-  func movies() -> [Movie] {
-    return [
+  func fetchMovies(closure: ([Movie] -> Void)) {
+    closure([
       Movie(title: "Movie 1"),
       Movie(title: "Movie 2"),
       Movie(title: "Movie 3")
-    ]
+    ])
   }
 }
