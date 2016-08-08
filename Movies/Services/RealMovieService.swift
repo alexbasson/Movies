@@ -1,17 +1,5 @@
 import Foundation
 
-struct Movie {
-  let title: String
-
-  init(title: String) {
-    self.title = title
-  }
-}
-
-protocol MovieService {
-  func fetchMovies(closure: ([Movie] -> Void)) -> Void
-}
-
 class RealMovieService: MovieService {
   let urlSession: URLSession
 
