@@ -16,6 +16,13 @@ class FakeURLSession: URLSession {
 
   func dataTaskWithURL(url: NSURL, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTask {
     requestedURL = url
+
+    // simulate returning test movies json
+    let testBundle = NSBundle(forClass: FakeURLSession.self)
+    let testMoviesFileURL = testBundle.URLForResource("test_movies", withExtension: "json")!
+    let fakeData = NSData(contentsOfURL: testMoviesFileURL)!
+    completionHandler(fakeData, nil, nil)
+
     return dataTask
   }
 }
@@ -57,7 +64,20 @@ class RealMovieServiceSpec: QuickSpec {
         }
 
         describe("handling the network response") {
+          var fetchedMovies: [Movie]!
 
+          it("parses the json into movies and passes those movies to the closure") {
+            movieService.fetchMovies() {
+              movies in
+              fetchedMovies = movies
+            }
+            let testMovies = [
+              Movie(title: "Test Movie 1"),
+              Movie(title: "Test Movie 2"),
+              Movie(title: "Test Movie 3")
+            ]
+            expect(fetchedMovies).to(equal(testMovies))
+          }
         }
       }
     }

@@ -12,7 +12,9 @@ class MoviesViewController: UIViewController {
       movies in
       self.movies = movies
       if let tableView = self.tableView {
-        tableView.reloadData()
+        dispatch_async(dispatch_get_main_queue()) {
+          tableView.reloadData()
+        }
       }
     }
   }
