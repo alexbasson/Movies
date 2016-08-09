@@ -17,19 +17,12 @@ class RealMovieService: MovieService {
       if let data = data {
         do {
           let json = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-          typealias MovieJson = [String: AnyObject] // the json representation of a movie
-          // json["movies"] points to an array where the elements of
-          // the array are json representations of movies
-          var movies: [Movie] = []
-          if let moviesJson = json["movies"] as? [MovieJson] {
-            for movieJson in moviesJson {
-              if let title = movieJson["title"] as? String {
-                let movie = Movie(title: title)
-                movies.append(movie)
-              }
-            }
+          typealias MovieJson = [String: AnyObject]
+          if let movies = json["movies"] as? [MovieJson] {
+            closure(movies.map({
+              return Movie(title: $0["title"] as! String)
+            }))
           }
-          closure(movies)
         } catch {}
       }
     }
