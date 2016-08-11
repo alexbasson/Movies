@@ -23,10 +23,16 @@ class RealMovieService: MovieService {
           if let movies = json["movies"] as? [MovieJson] {
             closure(movies.map({
               let title = $0["title"] as! String
+
               let releaseDates = $0["release_dates"] as! [String: String]
               let releaseDateString = releaseDates["theater"]!
               let releaseDate = self.dateFormatter.dateFromString(releaseDateString)!
-              return Movie(title: title, releaseDate: releaseDate)
+
+              let posters = $0["posters"] as! [String: String]
+              let thumbnailURLString = posters["thumbnail"]!
+              let thumbnailURL = NSURL(string: thumbnailURLString)!
+
+              return Movie(title: title, releaseDate: releaseDate, thumbnailURL: thumbnailURL)
             }))
           }
         } catch {}

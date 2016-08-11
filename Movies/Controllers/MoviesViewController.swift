@@ -3,6 +3,7 @@ import UIKit
 class MoviesViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView?
   var movieService: MovieService = RealMovieService()
+  var imageService: ImageService = ImageService.sharedInstance
   var movies: [Movie] = []
   var dateFormatter = NSDateFormatter()
 
@@ -13,6 +14,10 @@ class MoviesViewController: UIViewController {
 
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+
+    if let tableView = tableView {
+      tableView.rowHeight = 90
+    }
 
     movieService.fetchMovies() {
       movies in
@@ -39,6 +44,14 @@ extension MoviesViewController: UITableViewDataSource {
     }
     if let releaseDateLabel = cell.releaseDateLabel {
       releaseDateLabel.text = dateFormatter.stringFromDate(movie.releaseDate)
+    }
+    if let posterImageView = cell.posterImageView {
+      imageService.fetchImage(movie.thumbnailURL) {
+        image in
+        dispatch_async(dispatch_get_main_queue()) {
+          posterImageView.image = image
+        }
+      }
     }
     return cell
   }
