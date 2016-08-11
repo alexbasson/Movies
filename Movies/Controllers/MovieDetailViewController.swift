@@ -16,11 +16,11 @@ class MovieDetailViewController: UIViewController {
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
-    if let titleLabel = titleLabel, movie = movie {
-      titleLabel.text = movie.title
-    }
-    if let releaseDateLabel = releaseDateLabel, movie = movie {
-      releaseDateLabel.text = dateFormatter.stringFromDate(movie.releaseDate)
-    }
+    guard let movie = movie else { return }
+    guard let titleLabel = titleLabel else { return }
+    guard let releaseDateLabel = releaseDateLabel else { return }
+
+    titleLabel.text = movie.title
+    releaseDateLabel.text = dateFormatter.stringFromDate(movie.releaseDate)
   }
 }
