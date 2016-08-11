@@ -2,6 +2,7 @@ import Foundation
 
 class RealMovieService: MovieService {
   let urlSession: URLSession
+  var dateFormatter = NSDateFormatter()
 
   convenience init() {
     self.init(urlSession: NSURLSession.sharedSession())
@@ -9,6 +10,7 @@ class RealMovieService: MovieService {
 
   init(urlSession: URLSession) {
     self.urlSession = urlSession
+    dateFormatter.dateFormat = "yyyy-MM-dd"
   }
 
   func fetchMovies(closure: ([Movie] -> Void)) {
@@ -20,7 +22,11 @@ class RealMovieService: MovieService {
           typealias MovieJson = [String: AnyObject]
           if let movies = json["movies"] as? [MovieJson] {
             closure(movies.map({
-              return Movie(title: $0["title"] as! String)
+              let title = $0["title"] as! String
+              let releaseDates = $0["release_dates"] as! [String: String]
+              let releaseDateString = releaseDates["theater"]!
+              let releaseDate = self.dateFormatter.dateFromString(releaseDateString)!
+              return Movie(title: title, releaseDate: releaseDate)
             }))
           }
         } catch {}
